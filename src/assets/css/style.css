@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul,li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.67);
+}
+
+.header {
+  width: 1200px;
+  margin: 0 auto;
+
+}
+
+.layout {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
