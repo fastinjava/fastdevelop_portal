@@ -1,16 +1,16 @@
 <template>
   <el-row>
-    <el-row>
-      <el-tabs v-model="activeName" >
+    <el-row style="padding: 40px;">
+      <el-tabs v-model="activeName">
         <el-tab-pane label="基础信息" name="first">
-          <el-card style="width: 700px" >
+          <div style="width: 700px;background-color: #fff">
             <el-form ref="projectDetailPojo" :model="projectDetailPojo" label-width="80px">
-              <el-form-item label="id">
-                <el-input v-model="projectDetailPojo.id"></el-input>
-              </el-form-item>
-              <el-form-item label="作者">
-                <el-input disabled v-model="projectDetailPojo.username"></el-input>
-              </el-form-item>
+              <!--<el-form-item label="id">-->
+                <!--<el-input v-model="projectDetailPojo.id"></el-input>-->
+              <!--</el-form-item>-->
+              <!--<el-form-item label="作者">-->
+                <!--<el-input disabled v-model="projectDetailPojo.username"></el-input>-->
+              <!--</el-form-item>-->
               <el-form-item label="标题">
                 <el-input v-model="projectDetailPojo.title"></el-input>
               </el-form-item>
@@ -18,8 +18,13 @@
                 <el-input v-model="projectDetailPojo.subTitle"></el-input>
               </el-form-item>
               <el-form-item label="项目类型">
-                <el-select v-model="projectDetailPojo.projectType" placeholder="类型">
+                <el-select v-model="projectDetailPojo.projectType" placeholder="类型"
+
+                  style="width: 100%"
+
+                >
                   <el-option
+
                     v-for="item in projectTypes"
                     :key="item.value"
                     :label="item.label"
@@ -29,16 +34,17 @@
               </el-form-item>
               <el-form-item label="分类">
                 <el-cascader
+                  style="width: 100%;"
                   v-model="projectDetailPojo.categoryId"
                   :options="categoryTree"
                   @change="handleSelectCategoryChange"
                 ></el-cascader>
               </el-form-item>
               <!--<el-form-item label="分类名称">-->
-                <!--<el-input v-model="projectDetailPojo.categoryName"></el-input>-->
+              <!--<el-input v-model="projectDetailPojo.categoryName"></el-input>-->
               <!--</el-form-item>-->
               <el-form-item label="封面">
-                <el-input v-model="projectDetailPojo.img"></el-input>
+                <el-input v-model="projectDetailPojo.img" placeholder="请黏贴图片地址"></el-input>
               </el-form-item>
               <el-form-item label="封面预览">
                 <el-image
@@ -46,19 +52,24 @@
                   :src="projectDetailPojo.img"
                   :fit="`fill`"></el-image>
               </el-form-item>
-              <el-form-item label="创建时间">
-                <el-input  disabled v-model="$moment(projectDetailPojo.createTime).format('YYYY-DD-MM hh:ss:mm')"></el-input>
-              </el-form-item>
-              <el-form-item label="更新时间">
-                <el-input  disabled v-model="$moment(projectDetailPojo.updateTime).format('YYYY-DD-MM hh:ss:mm')"></el-input>
-              </el-form-item>
+              <!--<el-form-item label="创建时间">-->
+                <!--<el-input disabled-->
+                          <!--v-model="$moment(projectDetailPojo.createTime).format('YYYY-DD-MM hh:ss:mm')"></el-input>-->
+              <!--</el-form-item>-->
+              <!--<el-form-item label="更新时间">-->
+                <!--<el-input disabled-->
+                          <!--v-model="$moment(projectDetailPojo.updateTime).format('YYYY-DD-MM hh:ss:mm')"></el-input>-->
+              <!--</el-form-item>-->
             </el-form>
-            <el-button @click="saveProject">保存</el-button>
-          </el-card>
+            <el-button @click="saveProject" type="primary">保存</el-button>
+          </div>
         </el-tab-pane>
         <el-tab-pane v-if="projectDetailPojo.projectType==='1'" label="博客内容" name="second">
 
-          <el-button @click="$router.push({name: 'EDIT', query: {projectId: projectDetailPojo.id, projectType: projectDetailPojo.projectType}})"></el-button>
+          <el-button type="text"
+            @click="$router.push({name: 'EDIT', query: {projectId: projectDetailPojo.id, projectType: projectDetailPojo.projectType}})">
+            查看博客详情
+          </el-button>
 
         </el-tab-pane>
         <el-tab-pane v-if="projectDetailPojo.projectType==='2'" label="章节内容" name="third">
@@ -66,22 +77,32 @@
           <el-row>
             <el-button @click="chapterMainClick">新增章</el-button>
           </el-row>
-          <el-card accordion >
+          <el-card accordion>
             <el-card v-for="(zhang,zhangIndex) in projectDetailPojo.chapterDTOList[0].children" :key="zhangIndex">
               <div>
                 <span>{{zhang.chapterName}}</span>
                 <el-popover
-                placement="right"
-                trigger="hover"
-                 >
-                  <div >
+                  placement="right"
+                  trigger="hover"
+                >
+                  <div>
                     <el-button size="mini" type="text" @click="chapterSubClick(zhang)">新增节</el-button>
                   </div>
-                <el-button slot="reference" type="text"><i class="el-icon-more"></i></el-button>
-              </el-popover>
+                  <el-button slot="reference" type="text"><i class="el-icon-more"></i></el-button>
+                </el-popover>
               </div>
               <div style="padding-left: 30px;" v-for="(jie,jieIndex) in zhang.children" :key="jieIndex">
-                {{jie.chapterName}} <el-button type="text" @click="$router.push({name:'EDIT',query:{projectId:jie.chapterId,projectType:'3'}})">节编辑{{jie}}</el-button>
+                {{jie.chapterName}}
+                <el-popover
+                  placement="right"
+                  trigger="hover"
+                >
+                  <el-button type="text"
+                             @click="$router.push({name:'EDIT',query:{projectId:jie.chapterId,projectType:'3'}})">编辑节内容
+                  </el-button>
+                  <el-button slot="reference" type="text"><i class="el-icon-more"></i></el-button>
+
+                </el-popover>
               </div>
             </el-card>
           </el-card>
@@ -97,14 +118,19 @@
         title="提示"
         :visible.sync="chapterDialogVisible"
         width="30%"
-        >
+      >
         {{chapterPojo}}
         <el-card>
-          id:<el-input v-model="chapterPojo.id"></el-input>
-          pId:<el-input v-model="chapterPojo.pId"></el-input>
-          title:<el-input v-model="chapterPojo.title"></el-input>
-          chapterType:<el-input v-model="chapterPojo.chapterType"></el-input>
-          num:<el-input v-model="chapterPojo.num"></el-input>
+          id:
+          <el-input v-model="chapterPojo.id"></el-input>
+          pId:
+          <el-input v-model="chapterPojo.pId"></el-input>
+          title:
+          <el-input v-model="chapterPojo.title"></el-input>
+          chapterType:
+          <el-input v-model="chapterPojo.chapterType"></el-input>
+          num:
+          <el-input v-model="chapterPojo.num"></el-input>
         </el-card>
 
         <span slot="footer" class="dialog-footer">
@@ -127,7 +153,7 @@
     data() {
       return {
 
-        chapterDialogVisible:false,
+        chapterDialogVisible: false,
         projectTypes: [
           {
             label: '博客',
@@ -143,39 +169,39 @@
           },
         ],
         projectDetailPojo: {
-          "chapterDTOList":[
+          "chapterDTOList": [
             {
               "children": []
             }
           ]
         },
-        activeName:'third',
+        activeName: 'first',
         categoryTree: [],
-        chapterPojo:{
-          "id":"",
-          "pId":"",
-          "title":"",
-          "chapterType":"",
-          "num":"",
+        chapterPojo: {
+          "id": "",
+          "pId": "",
+          "title": "",
+          "chapterType": "",
+          "num": "",
         }
       }
     },
     methods: {
-      chapterSubmitClick(){
+      chapterSubmitClick() {
         this.chapterSave();
       },
-      chapterSave(){
-        projectApi.chapterInsert(this.chapterPojo).then(res=>{
+      chapterSave() {
+        projectApi.chapterInsert(this.chapterPojo).then(res => {
           console.log(res)
           this.detailProject(this.$route.query.id);
         })
       },
-      chapterSubClick(zhang){
+      chapterSubClick(zhang) {
         this.chapterDialogVisible = true;
         this.chapterPojo.pId = zhang.chapterId;
         this.chapterPojo.chapterType = '2'
       },
-      chapterMainClick(){
+      chapterMainClick() {
         this.chapterDialogVisible = true;
         this.chapterPojo.pId = this.projectDetailPojo.id;
         this.chapterPojo.chapterType = '1'
@@ -192,7 +218,7 @@
           this.projectDetailPojo.categoryId = valueElement;
         }
       },
-      saveProject(){
+      saveProject() {
 
         let reload = {};
         reload.id = this.projectDetailPojo.id;
@@ -202,7 +228,7 @@
         reload.projectType = this.projectDetailPojo.projectType;
         reload.categoryId = this.projectDetailPojo.categoryId;
         reload.img = this.projectDetailPojo.img;
-        projectApi.saveProject(reload).then(res=>{
+        projectApi.saveProject(reload).then(res => {
           console.log(res)
         })
       },

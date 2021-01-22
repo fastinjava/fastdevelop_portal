@@ -92,6 +92,12 @@
       </el-table>
     </el-row>
     <el-row>
+      <div style="float: right;margin-top: 20px;">
+        <el-button type="primary" size="small" @click="prePageClick">上一页</el-button>
+        <el-button type="primary" size="small" @click="nextPageClick">下一页</el-button>
+      </div>
+    </el-row>
+    <el-row>
       <el-dialog
         title="新增/更新项目基础信息"
         :visible.sync="dialogVisible"
@@ -151,6 +157,10 @@
     name: "",
     data() {
       return {
+        projectReqDTO:{
+          "pageNum":0,
+          "pageSize":10
+        },
         props: {  checkStrictly: true  },
         projectList: [],
         dialogVisible: false,
@@ -181,6 +191,14 @@
       }
     },
     methods: {
+      prePageClick(){
+        this.projectReqDTO.pageNum = this.projectReqDTO.pageNum - 1;
+        this.listProjects();
+      },
+      nextPageClick(){
+        this.projectReqDTO.pageNum = this.projectReqDTO.pageNum + 1;
+        this.listProjects();
+      },
       handleSelectCategoryChange(value) {
         if (value) {
           var valueElement = value[value.length - 1];
@@ -204,7 +222,7 @@
       },
 
       listProjects() {
-        projectApi.listProjects().then(res => {
+        projectApi.listProjects(this.projectReqDTO).then(res => {
           this.projectList = res.data;
         })
       },

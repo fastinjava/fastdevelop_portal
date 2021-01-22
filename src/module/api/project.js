@@ -8,8 +8,8 @@ const qs = require('qs');
 // export const question_saveAnswer = (reload) => {
 //   return http.requestPost(`/api/aq_manage/answer/saveOne`,reload)
 // }
-export const listProjects = ( ) => {
-  return http.requestQuickGet(`/api/fastdevelop_biz_web/project/listProjects`)
+export const listProjects = ( reload) => {
+  return http.requestPost(`/api/fastdevelop_biz_web/project/listProjects`,reload)
 }
 export const detailProject = ( id ) => {
   return http.requestQuickGet(`/api/fastdevelop_biz_web/project/detail?id=${id}`)
