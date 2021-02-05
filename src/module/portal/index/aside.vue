@@ -17,6 +17,8 @@
               }}
             </el-dropdown-item>
             <el-dropdown-item>小记</el-dropdown-item>
+            <el-dropdown-item  @click.native="$router.push({name:'Backend_Index_Index'})">工作台</el-dropdown-item>
+            <el-dropdown-item>写文章</el-dropdown-item>
             <el-dropdown-item>个人主页</el-dropdown-item>
             <el-dropdown-item>账户设置</el-dropdown-item>
             <el-dropdown-item>帮助文档</el-dropdown-item>
@@ -29,21 +31,23 @@
       </a>
     </li>
     <li>
-      <a
+      <el-button
         href="javascript:void(0);"
-        @click="$router.push({ name: 'INDEX' })"
+        @click="$router.push({ name: 'Portal_Index' })"
         style="background-color: rgba(93,174,247,0.25)"
-      >首页</a
+      >首页</el-button
       >
     </li>
+
+    <li><a href="">搜索</a></li>
     <li>
-      <a
+      <el-button
         href="javascript:void(0);"
-        @click="$router.push({ name: 'SEARCH' })"
-      >搜索</a
+        @click="$router.push({ name: 'DEVELOP_TOOL' })"
+        style="background-color: rgba(93,174,247,0.25)"
+      >工具</el-button
       >
     </li>
-    <li><a href="">开发工具</a></li>
     <li><a href="">下载管理</a></li>
   </ul>
 </template>
@@ -93,4 +97,8 @@
     width: 100%;
   }
 
+  a {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.67);
+  }
 </style>

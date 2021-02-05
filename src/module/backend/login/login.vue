@@ -83,7 +83,7 @@
             window.localStorage.setItem("fastdevelop_user_info", JSON.stringify(jwtUtil.decode(res.data)));
             window.localStorage.setItem("token", res.data);
             this.$message.success("登录成功");
-            this.$router.push({name: 'Backend_Index'})
+            this.$router.push({name: 'Portal_Index'})
             //  sessionStorage.setItem("fastdevelop_user_info", JSON.stringify(jwtUtil.decode(res.data)));
             // sessionStorage.setItem("token", res.data);
             //

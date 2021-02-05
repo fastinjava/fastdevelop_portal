@@ -2,7 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/module/backend/login/login.vue'
+import BLOG_DETAIL from '@/module/portal/index/blog_detail.vue'
+import ALBUM_DETAIL from '@/module/portal/index/album_detail.vue'
+import CHARPTER_DETAIL from '@/module/portal/index/charpter_detail.vue'
 import Portal_Index from '@/module/portal/index/index.vue'
+import DEVELOP_TOOL from '@/module/portal/index/develop.vue'
 import Backend_Index from '@/module/backend/index/index.vue'
 import Backend_Index_Index from '@/module/backend/index/backend_index.vue'
 import User_List from '@/module/backend/user/user_list.vue'
@@ -22,13 +26,35 @@ export default new Router({
   },
   routes: [
     {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },{
+      path: '/charpter_detail',
+      name: 'CHARPTER_DETAIL',
+      component: CHARPTER_DETAIL
+    },
+    {
+      path: '/album_detail',
+      name: 'ALBUM_DETAIL',
+      component: ALBUM_DETAIL
+    },
+    {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'Login',
+      component: Login
+    },{
+      path: '/develop_tool',
+      name: 'DEVELOP_TOOL',
+      component: DEVELOP_TOOL
     },{
       path: '/portal_index',
       name: 'Portal_Index',
       component: Portal_Index
+    },{
+      path: '/blog_detail',
+      name: 'BLOG_DETAIL',
+      component: BLOG_DETAIL
     },{
       path: '/backend_index',
       name: 'Backend_Index',
@@ -60,11 +86,7 @@ export default new Router({
           name: 'PROJECT_DETAIL',
           component: PROJECT_DETAIL
         },
-        {
-          path: '/backend_index/login',
-          name: 'Login',
-          component: Login
-        }
+
       ]
     },
   ]

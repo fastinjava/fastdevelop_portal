@@ -7,35 +7,15 @@
     </el-col>
     <el-col :span="5" style="min-height:1500px;background-color:  #e7e8ef">2</el-col>
     <el-col :span="10" style="min-height:1500px;background-color: #f3f3f5">
-      <div style="display: flex;flex-direction: row;padding: 0 10px;border-bottom: 1px solid rgba(0,0,0,0.22)"
-        v-for="(project , index) in projectList" :key="index"
-      >
-        <div>
-          <el-image
-            style="width: 100px; height: 100px;"
-            :src="project['img']"
-            :fit="`fit`"></el-image>
-        </div>
-        <div style="display: flex;flex-direction: column;margin-left: 20px;">
-          <div>
-            <a href="javascript:void(0);" style="font-size: 20px" @click="projectClick(project)">{{project['title']}}</a>
-          </div>
-          <div style="height: 10px;"></div>
-          <div>
-            {{project['subTitle']}}
-          </div>
-          <div style="display: flex;flex-direction: row;margin-top: 10px;">
-            <div class="project_l">
-              {{project['categoryName']}}
-            </div>
-            <div class="project_l">
-              {{project['username']}}
-            </div>
-            <div class="project_l">
-              {{project['projectTypeName']}}
-            </div>
-          </div>
-        </div>
+      <div style="margin: 0 auto;border-radius: 15px;">
+        <v-md-editor
+          ref="editor"
+          :value="blogContent"
+          mode="preview"
+          style="
+                    min-height: 1500px;
+                  "
+        ></v-md-editor>
       </div>
     </el-col>
     <!--<el-col :span="3" style="min-height:1500px;background-color: #e7e8ef">4</el-col>-->
@@ -60,6 +40,7 @@
     },
     data() {
       return {
+        blogContent:"# 暂无内容",
         projectList: [],
         userInfoPojo: {
           userpic: ''
@@ -67,6 +48,15 @@
       }
     },
     methods: {
+
+
+      blogContentGet(projectId){
+        projectApi.blogContentGet(projectId,"3").then(res=>{
+          console.log(res)
+          this.blogContent = res.data;
+        })
+      },
+
       projectClick(projectDetail){
         console.log(projectDetail)
         if ("1" === projectDetail.projectType) {
@@ -92,7 +82,8 @@
 
     },
     mounted() {
-      this.getProjectList();
+      var query = this.$route.query;
+      this.blogContentGet(query.chapterId);
     }
   }
 </script>

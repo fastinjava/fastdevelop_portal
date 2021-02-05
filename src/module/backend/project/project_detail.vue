@@ -6,10 +6,10 @@
           <div style="width: 700px;background-color: #fff">
             <el-form ref="projectDetailPojo" :model="projectDetailPojo" label-width="80px">
               <!--<el-form-item label="id">-->
-                <!--<el-input v-model="projectDetailPojo.id"></el-input>-->
+              <!--<el-input v-model="projectDetailPojo.id"></el-input>-->
               <!--</el-form-item>-->
               <!--<el-form-item label="作者">-->
-                <!--<el-input disabled v-model="projectDetailPojo.username"></el-input>-->
+              <!--<el-input disabled v-model="projectDetailPojo.username"></el-input>-->
               <!--</el-form-item>-->
               <el-form-item label="标题">
                 <el-input v-model="projectDetailPojo.title"></el-input>
@@ -20,7 +20,7 @@
               <el-form-item label="项目类型">
                 <el-select v-model="projectDetailPojo.projectType" placeholder="类型"
 
-                  style="width: 100%"
+                           style="width: 100%"
 
                 >
                   <el-option
@@ -53,12 +53,12 @@
                   :fit="`fill`"></el-image>
               </el-form-item>
               <!--<el-form-item label="创建时间">-->
-                <!--<el-input disabled-->
-                          <!--v-model="$moment(projectDetailPojo.createTime).format('YYYY-DD-MM hh:ss:mm')"></el-input>-->
+              <!--<el-input disabled-->
+              <!--v-model="$moment(projectDetailPojo.createTime).format('YYYY-DD-MM hh:ss:mm')"></el-input>-->
               <!--</el-form-item>-->
               <!--<el-form-item label="更新时间">-->
-                <!--<el-input disabled-->
-                          <!--v-model="$moment(projectDetailPojo.updateTime).format('YYYY-DD-MM hh:ss:mm')"></el-input>-->
+              <!--<el-input disabled-->
+              <!--v-model="$moment(projectDetailPojo.updateTime).format('YYYY-DD-MM hh:ss:mm')"></el-input>-->
               <!--</el-form-item>-->
             </el-form>
             <el-button @click="saveProject" type="primary">保存</el-button>
@@ -67,7 +67,7 @@
         <el-tab-pane v-if="projectDetailPojo.projectType==='1'" label="博客内容" name="second">
 
           <el-button type="text"
-            @click="$router.push({name: 'EDIT', query: {projectId: projectDetailPojo.id, projectType: projectDetailPojo.projectType}})">
+                     @click="$router.push({name: 'EDIT', query: {projectId: projectDetailPojo.id, projectType: projectDetailPojo.projectType}})">
             查看博客详情
           </el-button>
 
@@ -87,6 +87,9 @@
                 >
                   <div>
                     <el-button size="mini" type="text" @click="chapterSubClick(zhang)">新增节</el-button>
+                    <el-button size="mini" type="text" @click="deleteChapter({'chapterId':zhang.chapterId})">删除该章
+                    </el-button>
+                    <el-button size="mini" type="text" @click="updateChapter(zhang)">编辑该章</el-button>
                   </div>
                   <el-button slot="reference" type="text"><i class="el-icon-more"></i></el-button>
                 </el-popover>
@@ -100,6 +103,9 @@
                   <el-button type="text"
                              @click="$router.push({name:'EDIT',query:{projectId:jie.chapterId,projectType:'3'}})">编辑节内容
                   </el-button>
+                  <el-button size="mini" type="text" @click="deleteChapter({'chapterId':jie.chapterId})">删除该节 </el-button>
+                  <el-button size="mini" type="text" @click="updateChapter(jie)">编辑该节</el-button>
+
                   <el-button slot="reference" type="text"><i class="el-icon-more"></i></el-button>
 
                 </el-popover>
@@ -119,17 +125,17 @@
         :visible.sync="chapterDialogVisible"
         width="30%"
       >
-        {{chapterPojo}}
+        <!--{{chapterPojo}}-->
         <el-card>
-          id:
-          <el-input v-model="chapterPojo.id"></el-input>
-          pId:
-          <el-input v-model="chapterPojo.pId"></el-input>
-          title:
+          <!--id:-->
+          <!--<el-input v-model="chapterPojo.id"></el-input>-->
+          <!--pId:-->
+          <!--<el-input v-model="chapterPojo.pId"></el-input>-->
+          标题:
           <el-input v-model="chapterPojo.title"></el-input>
-          chapterType:
-          <el-input v-model="chapterPojo.chapterType"></el-input>
-          num:
+          <!--chapterType:-->
+          <!--<el-input v-model="chapterPojo.chapterType"></el-input>-->
+          顺序:
           <el-input v-model="chapterPojo.num"></el-input>
         </el-card>
 
@@ -137,6 +143,34 @@
           <el-button @click="chapterDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="chapterSubmitClick">确 定</el-button>
         </span>
+      </el-dialog>
+      <el-dialog
+        title="提示"
+        :visible.sync="chapterDialogUpdateVisible"
+        width="30%"
+      >
+
+        <div>
+          <el-card border="1">
+            <tr>
+                章节id
+                <el-input v-model="chapterUpdatePojo.id" disabled></el-input>
+            </tr>
+            <tr>
+                章节标题
+                <el-input v-model="chapterUpdatePojo.title"></el-input>
+            </tr>
+            <tr>
+                章节序号
+                <el-input v-model="chapterUpdatePojo.num"></el-input>
+            </tr>
+            <tr>
+              {{chapterUpdatePojo}}
+              <el-button @click="updateChapterClick">确定更新</el-button>
+            </tr>
+          </el-card>
+        </div>
+
       </el-dialog>
     </el-row>
 
@@ -154,6 +188,12 @@
       return {
 
         chapterDialogVisible: false,
+        chapterDialogUpdateVisible: false,
+        chapterUpdatePojo: {
+          'id': '',
+          'num': '',
+          'title': ''
+        },
         projectTypes: [
           {
             label: '博客',
@@ -187,6 +227,24 @@
       }
     },
     methods: {
+      updateChapterClick(){
+        projectApi.updateSelective(this.chapterUpdatePojo).then(res=>{
+          if (res.success) {
+            this.$message.info('更新成功');
+            this.chapterDialogUpdateVisible = false;
+            this.detailProject(this.$route.query.id);
+          }
+        })
+
+      },
+
+      updateChapter(chapter) {
+        this.chapterDialogUpdateVisible = true;
+        console.log(chapter)
+        this.chapterUpdatePojo.id = chapter.chapterId;
+        this.chapterUpdatePojo.title = chapter.chapterName;
+        this.chapterUpdatePojo.num = chapter.num;
+      },
       chapterSubmitClick() {
         this.chapterSave();
       },
@@ -194,12 +252,22 @@
         projectApi.chapterInsert(this.chapterPojo).then(res => {
           console.log(res)
           this.detailProject(this.$route.query.id);
+          this.chapterPojo = {};
+          this.chapterDialogVisible = false;
         })
       },
       chapterSubClick(zhang) {
         this.chapterDialogVisible = true;
         this.chapterPojo.pId = zhang.chapterId;
         this.chapterPojo.chapterType = '2'
+      },
+      deleteChapter(reload) {
+        projectApi.deleteChapter(reload).then(res => {
+          if (res.success) {
+            this.$message.info('删除成功')
+            this.detailProject(this.$route.query.id);
+          }
+        })
       },
       chapterMainClick() {
         this.chapterDialogVisible = true;

@@ -7,36 +7,40 @@
     </el-col>
     <el-col :span="5" style="min-height:1500px;background-color:  #e7e8ef">2</el-col>
     <el-col :span="10" style="min-height:1500px;background-color: #f3f3f5">
-      <div style="display: flex;flex-direction: row;padding: 0 10px;border-bottom: 1px solid rgba(0,0,0,0.22)"
-        v-for="(project , index) in projectList" :key="index"
-      >
-        <div>
-          <el-image
-            style="width: 100px; height: 100px;"
-            :src="project['img']"
-            :fit="`fit`"></el-image>
-        </div>
-        <div style="display: flex;flex-direction: column;margin-left: 20px;">
+      <el-card>
+
+        <div style="display: flex;flex-direction: row;justify-content: space-between">
           <div>
-            <a href="javascript:void(0);" style="font-size: 20px" @click="projectClick(project)">{{project['title']}}</a>
+            <h2>{{albumDetail.title}}</h2>
+            <br>
+            <h5>{{albumDetail.subTitle}}</h5>
+            <br>
+            <el-button type="primary" style="padding: 5px;">{{albumDetail.categoryName}}</el-button>
           </div>
-          <div style="height: 10px;"></div>
           <div>
-            {{project['subTitle']}}
-          </div>
-          <div style="display: flex;flex-direction: row;margin-top: 10px;">
-            <div class="project_l">
-              {{project['categoryName']}}
-            </div>
-            <div class="project_l">
-              {{project['username']}}
-            </div>
-            <div class="project_l">
-              {{project['projectTypeName']}}
-            </div>
+            <el-image :src="albumDetail.img" style="width: 100px;height: 120px;"></el-image>
           </div>
         </div>
-      </div>
+
+      </el-card>
+
+      <el-card style="min-height: 1900px;">
+        <el-card v-for="(zhang,zhangIndex) in albumDetail.chapterDTOList[0].children" :key="zhangIndex">
+          <h5>{{zhang.chapterName}}</h5>
+          <div style="height: 20px;"></div>
+          <div v-for="(jie,jieIndex) in zhang.children" :key="jieIndex" style="padding-left: 40px">
+            <el-button type="text" style="padding: 5px;"
+
+                       @click="$router.push({name:'CHARPTER_DETAIL',query:{
+                          chapterId:jie.chapterId
+                       }})"
+            >
+              {{jie.chapterName}}
+            </el-button>
+          </div>
+        </el-card>
+      </el-card>
+
     </el-col>
     <!--<el-col :span="3" style="min-height:1500px;background-color: #e7e8ef">4</el-col>-->
     <el-col :span="3" style="min-height:1500px;background-color: #e7e8ef">4</el-col>
@@ -60,6 +64,7 @@
     },
     data() {
       return {
+        albumDetail: {},
         projectList: [],
         userInfoPojo: {
           userpic: ''
@@ -67,32 +72,32 @@
       }
     },
     methods: {
-      projectClick(projectDetail){
+      projectClick(projectDetail) {
         console.log(projectDetail)
         if ("1" === projectDetail.projectType) {
           this.$message.info('去往博客详情页面')
-          this.$router.push({name:'BLOG_DETAIL',query:{blogId:projectDetail.id}})
-        }
-        if ("2" === projectDetail.projectType) {
-          this.$message.info('去往专栏详情页面')
-          this.$router.push({name:'ALBUM_DETAIL',query:{albumId:projectDetail.id}})
+          this.$router.push({name: 'BLOG_DETAIL', query: {blogId: projectDetail.id}})
         }
       },
       getProjectList() {
-        projectApi.listProjects({pageSize: 1000}).then(res => {
+        projectApi.listProjects().then(res => {
           console.log(res)
           this.projectList = res.data;
         })
-      },
-      projectDetail(id){
-        projectApi.detailProject(id).then(res=>{
-          console.log('albumDetail',res.data)
+      }
+      ,
+      projectDetail(id) {
+        projectApi.detailProject(id).then(res => {
+          console.log('albumDetail', res.data)
+          this.albumDetail = res.data;
         })
       },
 
     },
     mounted() {
       this.getProjectList();
+      var query = this.$route.query;
+      this.projectDetail(query.albumId)
     }
   }
 </script>

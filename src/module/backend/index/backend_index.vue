@@ -1,5 +1,11 @@
 <template>
-    <el-row>后台首页</el-row>
+    <el-row>
+
+      <div>
+        <el-button @click="$router.push({name:'Portal_Index'})">前台首页</el-button>
+      </div>
+
+    </el-row>
 </template>
 
 <script>

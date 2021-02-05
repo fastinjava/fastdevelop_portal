@@ -35,3 +35,9 @@ export const userList = (reload) => {
 export const chapterInsert = (reload) => {
   return http.requestPost(`/api/fastdevelop_biz_web/chapter/insertSelective`,reload)
 }
+export const deleteChapter = (reload) => {
+  return http.requestPost(`/api/fastdevelop_biz_web/chapter/deleteChapter`,reload)
+}
+export const updateSelective = (reload) => {
+  return http.requestPost(`/api/fastdevelop_biz_web/chapter/updateSelective`,reload)
+}
