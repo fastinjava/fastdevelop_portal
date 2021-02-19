@@ -87,6 +87,10 @@
                 >
                   <div>
                     <el-button size="mini" type="text" @click="chapterSubClick(zhang)">新增节</el-button>
+                    <el-button type="text"
+                               @click="$router.push({name:'EDIT',query:{projectId:zhang.chapterId,projectType:'3'}})">
+                      编辑节内容
+                    </el-button>
                     <el-button size="mini" type="text" @click="deleteChapter({'chapterId':zhang.chapterId})">删除该章
                     </el-button>
                     <el-button size="mini" type="text" @click="updateChapter(zhang)">编辑该章</el-button>
@@ -103,7 +107,8 @@
                   <el-button type="text"
                              @click="$router.push({name:'EDIT',query:{projectId:jie.chapterId,projectType:'3'}})">编辑节内容
                   </el-button>
-                  <el-button size="mini" type="text" @click="deleteChapter({'chapterId':jie.chapterId})">删除该节 </el-button>
+                  <el-button size="mini" type="text" @click="deleteChapter({'chapterId':jie.chapterId})">删除该节
+                  </el-button>
                   <el-button size="mini" type="text" @click="updateChapter(jie)">编辑该节</el-button>
 
                   <el-button slot="reference" type="text"><i class="el-icon-more"></i></el-button>
@@ -114,6 +119,70 @@
           </el-card>
 
         </el-tab-pane>
+
+        <el-tab-pane v-if="projectDetailPojo.projectType==='3'" label="问答内容" name="fourth">
+
+
+          <el-row>
+            <el-card>
+              {{projectDetailPojo.title}}
+            </el-card>
+          </el-row>
+
+          <el-row>
+            <el-button @click="listAnswersClick">显示答案</el-button>
+          </el-row>
+
+          <el-row>
+            <el-card v-for="(answer,index) in answerList" :key="index">
+
+              <div slot="header" class="clearfix">
+                <el-button type="primary" style="padding: 10px;"><span>答案{{answer.num}}</span></el-button>
+                <el-popover
+                  placement="top"
+                  width="160"
+                  >
+                  <div style=" margin: 0">
+                    <el-button type="primary" size="mini" @click="deleteAnswerClick(answer)">删除</el-button>
+                  </div>
+                  <el-button slot="reference">......</el-button>
+                </el-popover>
+              </div>
+
+              <v-md-editor
+                ref="editor"
+                :value="answer.contentStr"
+                mode="preview"
+              ></v-md-editor>
+
+            </el-card>
+
+          </el-row>
+
+
+          <el-row>
+            <el-col :span="1">
+              请输入内容
+            </el-col>
+            <el-col :span="12">
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 4, maxRows: 14}"
+                placeholder="请输入答案内容"
+                v-model="answer.contentStr">
+              </el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-input placeholder="请输入顺序编号" v-model="answer.num"></el-input>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-button @click="aqSubmit">确定答案</el-button>
+          </el-row>
+
+        </el-tab-pane>
+
+
       </el-tabs>
 
     </el-row>
@@ -153,16 +222,16 @@
         <div>
           <el-card border="1">
             <tr>
-                章节id
-                <el-input v-model="chapterUpdatePojo.id" disabled></el-input>
+              章节id
+              <el-input v-model="chapterUpdatePojo.id" disabled></el-input>
             </tr>
             <tr>
-                章节标题
-                <el-input v-model="chapterUpdatePojo.title"></el-input>
+              章节标题
+              <el-input v-model="chapterUpdatePojo.title"></el-input>
             </tr>
             <tr>
-                章节序号
-                <el-input v-model="chapterUpdatePojo.num"></el-input>
+              章节序号
+              <el-input v-model="chapterUpdatePojo.num"></el-input>
             </tr>
             <tr>
               {{chapterUpdatePojo}}
@@ -186,7 +255,14 @@
     name: "",
     data() {
       return {
+        answer: {
+          "qId": "",
+          "num": 1,
+          "contentStr": ""
 
+        },
+        answerList:[],
+        anserContent: "输入问题答案",
         chapterDialogVisible: false,
         chapterDialogUpdateVisible: false,
         chapterUpdatePojo: {
@@ -227,8 +303,50 @@
       }
     },
     methods: {
-      updateChapterClick(){
-        projectApi.updateSelective(this.chapterUpdatePojo).then(res=>{
+      deleteAnswerClick(answer){
+        console.log(answer)
+        projectApi.deleteAnswer({
+            'qId':answer.qId,
+            'ids':answer.id
+        }).then(res=>{
+          if (res.success){
+            this.$message.info('删除成功');
+            this.listAnswersClick();
+          }
+        })
+
+      },
+
+      listAnswersClick(){
+        let reload = {};
+        reload.projectId = this.$route.query.id;
+        projectApi.answerListAnswers(reload).then(res=>{
+          console
+            .log(res)
+
+          if (res.success) {
+            this.answerList = res.data;
+          }
+
+        })
+      },
+      aqSubmit() {
+        this.$message.info('回答问题')
+        this.answer.qId = this.$route.query.id;
+        console.log(this.answer)
+
+        projectApi.answerSave(this.answer).then(res => {
+          if (res.success) {
+            this.$message.info('回答问题成功');
+          }
+        }).then(res => {
+          this.answer = {};
+          this.listAnswersClick();
+        })
+      },
+
+      updateChapterClick() {
+        projectApi.updateSelective(this.chapterUpdatePojo).then(res => {
           if (res.success) {
             this.$message.info('更新成功');
             this.chapterDialogUpdateVisible = false;
@@ -305,6 +423,12 @@
           if (res.success) {
             this.projectDetailPojo = res.data;
           }
+        }).then(res=>{
+
+          if (this.projectDetailPojo.projectType === '3') {
+            this.listAnswersClick();
+          }
+
         })
       }
     },

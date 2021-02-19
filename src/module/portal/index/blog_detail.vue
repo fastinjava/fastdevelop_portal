@@ -53,12 +53,14 @@
     </el-col>
     <!--<el-col :span="3" style="min-height:1500px;background-color: #e7e8ef">4</el-col>-->
     <el-col :span="3" style="min-height:1500px;background-color: #e7e8ef">
-      <div style="margin:20px 20px;">
-        <el-button style="font-size: 30px"><i class="el-icon-star-off"></i></el-button>
-        <el-button style="font-size: 30px"><i class="el-icon-star-on" style="color: blue;"></i></el-button>
-      </div>
+      <!--<div style="margin:20px 20px;">-->
+        <!--<el-button style="font-size: 30px"><i class="el-icon-star-off"></i></el-button>-->
+        <!--<el-button style="font-size: 30px"><i class="el-icon-star-on" style="color: blue;"></i></el-button>-->
+      <!--</div>-->
     </el-col>
-    <el-col :span="5" style="min-height:1500px;background-color: #ffffff">5</el-col>
+    <el-col :span="5" style="min-height:1500px;background-color: #ffffff">
+      <g-scroll></g-scroll>
+    </el-col>
   </el-row>
 </template>
 
@@ -66,7 +68,7 @@
 
 
   import vAside from "./aside";
-
+  import gScroll from '../../../components/goScroll'
   var jwtUtil = require("jsonwebtoken");
   import * as userApi from '../../user/api/user'
   import * as projectApi from '../../api/project'
@@ -74,7 +76,7 @@
   export default {
     name: "",
     components: {
-      vAside,
+      vAside,gScroll
     },
     data() {
       return {

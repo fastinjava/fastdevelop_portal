@@ -76,6 +76,7 @@
     },
     methods: {
       userLogin() {
+        console.log(this.loginForm)
         userApi.userLogin(this.loginForm).then(res => {
           console.log(res)
           if (res.success) {

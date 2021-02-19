@@ -41,3 +41,15 @@ export const deleteChapter = (reload) => {
 export const updateSelective = (reload) => {
   return http.requestPost(`/api/fastdevelop_biz_web/chapter/updateSelective`,reload)
 }
+
+export const answerSave = (reload) => {
+  return http.requestPost(`/api/fastdevelop_biz_web/answer/save`,reload)
+}
+export const deleteAnswer = (reload) => {
+  return http.requestPost(`/api/fastdevelop_biz_web/answer/deleteAnswer`,reload)
+}
+
+export const answerListAnswers = (reload) => {
+  return http.requestQuickGet(`/api/fastdevelop_biz_web/answer/listAnswers?`+qs.stringify(reload))
+}
+

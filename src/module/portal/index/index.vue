@@ -7,16 +7,10 @@
     </el-col>
     <el-col :span="5" style="min-height:1500px;background-color:  #e7e8ef">2</el-col>
     <el-col :span="10" style="min-height:1500px;background-color: #f3f3f5">
-      <div style="display: flex;flex-direction: row;padding: 0 10px;border-bottom: 1px solid rgba(0,0,0,0.22)"
+      <el-card style="display: flex;flex-direction: row;padding: 0 10px;border-bottom: 1px solid rgba(0,0,0,0.22);margin-bottom: 10px;"
         v-for="(project , index) in projectList" :key="index"
       >
-        <div>
-          <el-image
-            style="width: 100px; height: 100px;"
-            :src="project['img']"
-            :fit="`fit`"></el-image>
-        </div>
-        <div style="display: flex;flex-direction: column;margin-left: 20px;">
+        <div style="display: flex;flex-direction: column;">
           <div>
             <a href="javascript:void(0);" style="font-size: 20px" @click="projectClick(project)">{{project['title']}}</a>
           </div>
@@ -25,18 +19,19 @@
             {{project['subTitle']}}
           </div>
           <div style="display: flex;flex-direction: row;margin-top: 10px;">
-            <div class="project_l">
-              {{project['categoryName']}}
+            <div class="" style="margin-left: 0px;">
+              <el-button style="padding: 10px;" type="text">{{project['categoryName']}}</el-button>
             </div>
             <div class="project_l">
-              {{project['username']}}
+              <el-button style="padding: 10px;" type="text">{{project['username']}}</el-button>
+
             </div>
             <div class="project_l">
-              {{project['projectTypeName']}}
+              <el-button style="padding: 10px;" type="text">{{project['projectTypeName']}}</el-button>
             </div>
           </div>
         </div>
-      </div>
+      </el-card>
     </el-col>
     <!--<el-col :span="3" style="min-height:1500px;background-color: #e7e8ef">4</el-col>-->
     <el-col :span="3" style="min-height:1500px;background-color: #e7e8ef">4</el-col>
@@ -77,6 +72,12 @@
           this.$message.info('去往专栏详情页面')
           this.$router.push({name:'ALBUM_DETAIL',query:{albumId:projectDetail.id}})
         }
+
+        if ("3" === projectDetail.projectType) {
+          this.$message.info('去往wenda 详情页面')
+          this.$router.push({name:'QA',query:{questionId:projectDetail.id}})
+        }
+
       },
       getProjectList() {
         projectApi.listProjects({pageSize: 1000}).then(res => {

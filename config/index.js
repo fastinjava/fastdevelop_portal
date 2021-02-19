@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api/fastdevelop/': {
-        target: 'http://localhost:10010/',
+        target: 'http://localhost:10001/',
         changeOrigin: true,//是否允许跨越
         pathRewrite: {
           '^/api': ''
@@ -40,7 +40,7 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps
      */

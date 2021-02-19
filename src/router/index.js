@@ -4,8 +4,10 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/module/backend/login/login.vue'
 import BLOG_DETAIL from '@/module/portal/index/blog_detail.vue'
 import ALBUM_DETAIL from '@/module/portal/index/album_detail.vue'
+import QA from '@/module/portal/index/qa.vue'
 import CHARPTER_DETAIL from '@/module/portal/index/charpter_detail.vue'
 import Portal_Index from '@/module/portal/index/index.vue'
+import SEARCH from '@/module/portal/index/search.vue'
 import DEVELOP_TOOL from '@/module/portal/index/develop.vue'
 import Backend_Index from '@/module/backend/index/index.vue'
 import Backend_Index_Index from '@/module/backend/index/backend_index.vue'
@@ -29,6 +31,10 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    }, {
+      path: '/qa',
+      name: 'QA',
+      component: QA
     },{
       path: '/charpter_detail',
       name: 'CHARPTER_DETAIL',
@@ -38,6 +44,10 @@ export default new Router({
       path: '/album_detail',
       name: 'ALBUM_DETAIL',
       component: ALBUM_DETAIL
+    }, {
+      path: '/search',
+      name: 'SEARCH',
+      component: SEARCH
     },
     {
       path: '/',

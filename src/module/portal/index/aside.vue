@@ -39,7 +39,16 @@
       >
     </li>
 
-    <li><a href="">搜索</a></li>
+    <li>
+
+      <el-button
+        href="javascript:void(0);"
+        @click="$router.push({ name: 'SEARCH' })"
+        style="margin: 10px 0px;background-color: rgba(93,174,247,0.25)"
+      >搜索</el-button
+      >
+
+    </li>
     <li>
       <el-button
         href="javascript:void(0);"

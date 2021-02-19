@@ -1,6 +1,6 @@
 <template>
   <!--行宽  1920 -->
-  <el-row>
+  <el-row style="padding: 0;">
 
     <el-col :span="1" style="min-height:1500px;background-color: #f3f3f5">
       <v-aside></v-aside>
@@ -26,11 +26,17 @@
 
       <el-card style="min-height: 1900px;">
         <el-card v-for="(zhang,zhangIndex) in albumDetail.chapterDTOList[0].children" :key="zhangIndex">
-          <h5>{{zhang.chapterName}}</h5>
+          <h5>
+            <el-button
+              style="padding: 20px"
+              @click="$router.push({name:'CHARPTER_DETAIL',query:{
+                          chapterId:zhang.chapterId
+                       }})">{{zhang.chapterName}}
+            </el-button>
+          </h5>
           <div style="height: 20px;"></div>
           <div v-for="(jie,jieIndex) in zhang.children" :key="jieIndex" style="padding-left: 40px">
             <el-button type="text" style="padding: 5px;"
-
                        @click="$router.push({name:'CHARPTER_DETAIL',query:{
                           chapterId:jie.chapterId
                        }})"
@@ -64,7 +70,11 @@
     },
     data() {
       return {
-        albumDetail: {},
+        albumDetail: {
+          chapterDTOList: [
+            {}
+          ]
+        },
         projectList: [],
         userInfoPojo: {
           userpic: ''
